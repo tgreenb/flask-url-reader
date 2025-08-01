@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import os
 
 app = Flask(__name__)
+
 ALLOWED_DOMAINS = ["openai.com", "help.openai.com"]
 
 @app.route('/read-url', methods=['GET'])
@@ -34,6 +35,10 @@ def read_url():
         return jsonify({"results": page_text})
     except requests.exceptions.RequestException as e:
         return jsonify({"error": f"Failed to fetch the URL: {str(e)}"}), 500
+
+@app.route('/openapi.yaml', methods=['GET'])
+def serve_openapi():
+    return send_from_directory('.', 'openapi.yaml')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
