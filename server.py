@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import os
 
 app = Flask(__name__)
 ALLOWED_DOMAINS = ["openai.com", "help.openai.com"]
@@ -11,6 +12,7 @@ def read_url():
     url_to_fetch = request.args.get('url')
     if not url_to_fetch:
         return jsonify({"error": "URL parameter is required."}), 400
+
     try:
         parsed_url = urlparse(url_to_fetch)
         if not parsed_url.scheme.startswith("http"):
