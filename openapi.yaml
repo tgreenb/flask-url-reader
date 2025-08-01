@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Flask URL Reader API
+  version: 1.0.0
+  description: An API that fetches and extracts text from allowed public web pages.
+
+servers:
+  - url: https://flask-url-reader.onrender.com
+
+paths:
+  /read-url:
+    get:
+      summary: Extracts text from a given URL
+      operationId: readURL
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Full URL of the public web page to fetch (must be from an allowed domain)
+      responses:
+        '200':
+          description: Successfully returned scraped page content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: string
+        '400':
+          description: Bad request, such as missing or invalid URL
+        '403':
+          description: Access denied for the domain
+        '500':
+          description: Server error when trying to fetch the content
